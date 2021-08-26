@@ -1,0 +1,70 @@
+USE world;
+SHOW TABLES;
+DESCRIBE city;
+DESCRIBE country;
+DESCRIBE countrylanguage;
+SELECT * FROM city;
+SELECT * FROM country;
+SELECT * FROM countrylanguage;
+
+#1-Number of cities in the USA
+SELECT countrycode FROM city;
+SELECT COUNT(name) FROM city WHERE countrycode='USA';
+
+#2-Population & life expectancy in Argentina
+SELECT population, lifeexpectancy FROM country WHERE name='Argentina';
+
+#3-Country that has the highest life expectancy
+SELECT name, lifeexpectancy FROM country WHERE lifeexpectancy=(
+SELECT MAX(lifeexpectancy) FROM country
+);
+
+#4-Find the capital of Spain
+SELECT ci.name FROM country co
+JOIN city ci ON ci.id=co.capital
+WHERE co.name='Spain';
+
+#5-List all the languages spoken in Southeast Asia
+SELECT co.name, cl.language FROM country co
+JOIN countrylanguage cl ON co.code=cl.countrycode
+WHERE co.region='Southeast Asia';
+
+#6-List 25 cities that start with F
+SELECT * FROM city WHERE name LIKE 'F%' LIMIT 25;
+
+#7-Number of cities in China --------------
+SELECT COUNT(co.name) FROM country co 
+JOIN city ci ON ci.name=co.name
+WHERE co.name='China';
+
+#8-Country that has the lowest population, discard those with 0
+SELECT MIN(population), name FROM country WHERE population>0 LIMIT 1;
+
+#9-Number of countries the database contains 
+SELECT COUNT(name) FROM country;
+
+#10-Top 10 largest countries by area
+SELECT name FROM country ORDER BY surfacearea DESC LIMIT 10;
+
+#11-5 largest cities by population in Japan
+SELECT name FROM city WHERE countrycode='JPN' ORDER BY population DESC LIMIT 5;
+
+#12-List the names and country codes of every country with Elizabeth II as head of state + fix mistake
+UPDATE country SET headofstate = REPLACE(headofstate, 'Elisabeth II', 'Elizabeth II');
+SET SQL_SAFE_UPDATES=1; 
+SELECT name, code FROM country WHERE headofstate='Elizabeth II';
+
+#13-Top 10 countries with smallest population-to-area ratio, discard 0 ------
+SELECT name FROM country WHERE population=surfacearea;
+
+#14-List every unique world language
+SELECT DISTINCT language FROM countrylanguage;
+
+#15-Names & GNP of the world's top 10 richest countries
+SELECT name, GNP FROM country ORDER BY GNP DESC LIMIT 10;
+
+#16-List the names of, and number of languages spoken by, the top ten most multilingual countries --------
+SELECT name, COUNT(language) FROM countrylanguage DESC LIMIT 10;
+
+
+Key: where ----------- it means that I was unsure/did not know what to do it/ did not get a result
